@@ -1,0 +1,27 @@
+apply plugin: 'java'
+//apply plugin: 'application'
+
+//mainClassName = 'main.java.hello.HelloWorld'
+
+task(runServer, dependsOn: 'classes', type: JavaExec) {
+    main = 'main.java.server.Server'
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+task(runClient, dependsOn: 'classes', type: JavaExec) {
+    main = 'main.java.client.Client'
+    classpath = sourceSets.main.runtimeClasspath
+}
+ 
+defaultTasks 'runServer'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation('org.junit.jupiter:junit-jupiter:5.5.1')
+}
+
