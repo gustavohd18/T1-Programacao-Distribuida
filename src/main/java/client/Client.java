@@ -11,4 +11,8 @@ public class Client {
     System.out.println("Server ip"+ args[0]);
     System.out.println("client ip"+ args[1]);
 	}
+
+  public int sumTest(int n1, int n2) {
+    return n1 + n2;
+  }
 }
