@@ -9,6 +9,7 @@ import interfaces.JogadorInterface;
 import main.java.interfaces.JogoInterface;
 
 public class Client extends UnicastRemoteObject implements JogadorInterface {
+  private static volatile boolean changed = true;
 
   public Client() throws RemoteException {
 	}
@@ -49,21 +50,24 @@ public class Client extends UnicastRemoteObject implements JogadorInterface {
 		}
 
     while (true) {
-			try {
-				game.registra();
-				System.out.println("Call to server..." );
-			} catch (RemoteException e) {
-				e.printStackTrace();
-			}
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException ex) {}
-		}
+      if (changed == true) {
+          changed = false;
+        try {
+          game.registra();
+          System.out.println("Call to server..." );
+        } catch (RemoteException e) {
+          e.printStackTrace();
+        }
+        try {
+          Thread.sleep(1000);
+        } catch (InterruptedException ex) {}
+      }
+    }
 	}
 
   public int Result(int val) {
-		System.out.println("Called back, result is: " + val);
-		
+		System.out.println("Your id to play is: " + val);
+  	
 		return val;
 	}
 

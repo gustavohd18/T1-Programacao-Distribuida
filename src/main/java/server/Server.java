@@ -103,4 +103,22 @@ public class Server extends UnicastRemoteObject implements JogoInterface {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+	//private static Runnable t1 = new Runnable() {
+	//	public void run() {
+	//		try {
+	//			result = gamerManager.registerUser();
+	//			changed = true;
+	///			try {
+	//				remoteHostName = getClientHost();
+	//			} catch (Exception e) {
+	//				System.out.println ("Failed to get client IP");
+	//				e.printStackTrace();
+	//			}
+				
+	//		} catch (Exception e) {
+	//			e.printStackTrace();
+	//		}
+	//	}
+//};
 }

@@ -31,6 +31,7 @@ public class GameManager {
 
 	public int registerUser() throws InterruptedException {
     semaphore.acquire();
+    System.out.println("Semaforo pego"+ semaphore.availablePermits());
     int userId = randomGenerator.nextInt();
     if(actualNumberOfPlayers < totNumberOfPlayer) {
     while(isUserRegisted(userId)) {
@@ -39,9 +40,11 @@ public class GameManager {
     users.add(userId);
     actualNumberOfPlayers++;
     semaphore.release();
+    System.out.println("Semaforo liberado" + semaphore.availablePermits());
     return userId;
     } else {
       semaphore.release();
+      System.out.println("Semaforo liberado" + semaphore.availablePermits());
       return -1;
     }
 	}
