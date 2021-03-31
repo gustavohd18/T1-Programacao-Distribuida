@@ -26,7 +26,6 @@ public class GameManager {
 	}
 
 	public int registerUser() throws InterruptedException {
-    System.out.println("Estou no metodo");
     semaphore.acquire();
     int userId = randomGenerator.nextInt();
     if(actualNumberOfPlayers < totNumberOfPlayer) {
@@ -36,7 +35,6 @@ public class GameManager {
     users.add(userId);
     actualNumberOfPlayers++;
     semaphore.release();
-    System.out.println("sai do metodo");
     return userId;
     } else {
       semaphore.release();
