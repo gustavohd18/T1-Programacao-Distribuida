@@ -8,9 +8,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GameManagerTest {
   @Test
-  void shouldReturnAIdToUser(){
-    GameManager gameManager = new GameManager();
+  void shouldReturnAIdToUser() throws InterruptedException {
+    GameManager gameManager = new GameManager(5);
     int userId = gameManager.registerUser();
     assertEquals(userId, gameManager.getListOfUser().get(0));
-  }  
+  } 
+  @Test
+  void shouldNotAddUserToList() throws InterruptedException {
+    GameManager gameManager = new GameManager(1);
+    int userId = gameManager.registerUser();
+    int userId2 = gameManager.registerUser();
+    assertEquals(userId, gameManager.getListOfUser().get(0));
+    assertEquals(1, gameManager.getListOfUser().size());
+  }   
 }
