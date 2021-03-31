@@ -25,6 +25,10 @@ public class GameManager {
 		return users;
 	}
 
+  public boolean isFullPlayers() {
+    return actualNumberOfPlayers == totNumberOfPlayer;
+  }
+
 	public int registerUser() throws InterruptedException {
     semaphore.acquire();
     int userId = randomGenerator.nextInt();
