@@ -18,16 +18,17 @@ public class HeartBeatPlayersTask  extends TimerTask{
   public void run() {
     List<User> users = gameManager.getListOfUser();
 		for (int i = 0; i< users.size(); i++) {
-      String userIp = users.get(i).getUserIP();
+      User user = users.get(i);
+      String userIp = user.getUserIP();
       String connectLocation = "rmi://" + userIp + ":52369/Game2";
   
       JogadorInterface player = null;
       try {
-        System.out.println("Verify player is alive : " + connectLocation);
+        System.out.println("Verify player is alive: " + user.getUserIP());
         player = (JogadorInterface) Naming.lookup(connectLocation);
       } catch (Exception e) {
          // caso tenha erro possivelmente temos que remover o usuario da lista pois ele nao esta no jogo mais
-        System.out.println ("Player don't aswers, so will be remove:" + connectLocation);
+        System.out.println ("Player don't aswers, so will be remove: " + user.getUserIP());
         try {
           gameManager.removeUserIp(userIp);
         } catch(InterruptedException error) {
@@ -39,7 +40,7 @@ public class HeartBeatPlayersTask  extends TimerTask{
         player.verifica();
       } catch (RemoteException e) {
         // caso tenha erro possivelmente temos que remover o usuario da lista pois ele nao esta no jogo mais
-        System.out.println ("Player don't aswers, so will be remove:" + connectLocation);
+        System.out.println ("Player don't aswers, so will be remove: " + user.getUserIP());
         try {
           gameManager.removeUserIp(userIp);
         } catch(InterruptedException error) {
