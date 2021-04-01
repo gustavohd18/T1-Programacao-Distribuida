@@ -2,6 +2,7 @@ package main.java.server;
 
 import java.rmi.Naming;
 import java.rmi.RemoteException;
+import java.util.List;
 import java.util.TimerTask;
 
 import interfaces.JogadorInterface;
@@ -14,7 +15,9 @@ public class HeartBeatPlayersTask  extends TimerTask{
   }
   @Override
   public void run() {
-		for (String userIp : gameManager.getListOfUserIp()) {
+    List<String> userIps = gameManager.getListOfUserIp();
+		for (int i = 0; i< userIps.size(); i++) {
+      String userIp = userIps.get(i);
       String connectLocation = "rmi://" + userIp + ":52369/Game2";
   
       JogadorInterface player = null;
