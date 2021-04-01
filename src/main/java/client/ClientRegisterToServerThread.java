@@ -3,14 +3,17 @@ import java.rmi.Naming;
 import java.rmi.RemoteException;
 
 import main.java.interfaces.JogoInterface;
+import main.java.logic.PlayerManager;
 
 public class ClientRegisterToServerThread extends Thread {
 	protected String[] thread_args;
 	protected String thread_name;
+	protected PlayerManager playerManager;
 
-	public ClientRegisterToServerThread (String[] args, String name) {
+	public ClientRegisterToServerThread (String[] args, PlayerManager player, String name) {
 		thread_args = args;
 		thread_name = name;
+		playerManager = player;		
 	}
 
 	public void run() {
@@ -32,7 +35,13 @@ public class ClientRegisterToServerThread extends Thread {
       if(resultFromServer == -1) {
         System.out.println("Sorry we can't register you!");
       } else {
-				System.out.println("register with successful your id: " + resultFromServer);
+
+				try {
+					playerManager.setUserId(resultFromServer);
+					System.out.println("register with successful your id: " + resultFromServer);
+				} catch (Exception e) {
+					System.out.println("Error to set user");
+				}
 			}			
 	
 		  } catch (RemoteException e) {

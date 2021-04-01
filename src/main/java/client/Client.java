@@ -9,8 +9,11 @@ import main.java.client.ClientRegisterToServerThread;
 
 import interfaces.JogadorInterface;
 import main.java.interfaces.JogoInterface;
+import main.java.logic.PlayerManager;
 
 public class Client extends UnicastRemoteObject implements JogadorInterface {
+
+	private static PlayerManager playerManager;
 
   public Client() throws RemoteException {
 	}
@@ -33,12 +36,13 @@ public class Client extends UnicastRemoteObject implements JogadorInterface {
     try {
 			String client = "rmi://" + args[1] + ":52369/Game2";
 			Naming.rebind(client, new Client());
+			playerManager = new PlayerManager();
 			System.out.println("Server is ready.");
 		} catch (Exception e) {
 			System.out.println("Server Serverfailed: " + e);
 		}
 
-		ClientRegisterToServerThread clientRegisterToServerThread =	new ClientRegisterToServerThread(args, "Register user");
+		ClientRegisterToServerThread clientRegisterToServerThread =	new ClientRegisterToServerThread(args, playerManager, "Register user");
 
 		clientRegisterToServerThread.start();
 
