@@ -5,9 +5,10 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.Semaphore;
 
-// essa classe possivelmente pode ser que seja somente utilizada pelo servidor nao sendo necessario thead ou algo assim
+// necessita ser um singleton para ter uma unica instancia em toda a parte do server multiplas theads
 public class GameManager {
   private List<Integer> users;
+  private List<String> usersIp;
   private Random randomGenerator;
   private int actualNumberOfPlayers;
   private int totNumberOfPlayer;
@@ -16,6 +17,7 @@ public class GameManager {
 
   public GameManager(int players) {
     users = new ArrayList<Integer>();
+    usersIp = new ArrayList<String>();
     randomGenerator = new Random();
     totNumberOfPlayer = players;
     actualNumberOfPlayers = 0;
@@ -26,20 +28,33 @@ public class GameManager {
 	}
 
   public boolean isFullPlayers() {
-    return actualNumberOfPlayers == totNumberOfPlayer;
+    return actualNumberOfPlayers >= totNumberOfPlayer;
   }
+
+  public void addUserIp(String id) throws InterruptedException {
+    semaphore.acquire();
+    usersIp.add(id);
+    semaphore.release();
+  }
+
+  public List<String> getListOfUserIp() {
+		return usersIp;
+	}
 
 	public int registerUser() throws InterruptedException {
     semaphore.acquire();
     int userId = randomGenerator.nextInt();
-    if(actualNumberOfPlayers < totNumberOfPlayer) {
-    while(isUserRegisted(userId)) {
-      userId = randomGenerator.nextInt();
-    }
-    users.add(userId);
-    actualNumberOfPlayers++;
-    semaphore.release();
-    return userId;
+
+    if(!isFullPlayers()) {
+      while(isUserRegisted(userId)) {
+        userId = randomGenerator.nextInt();
+      }
+
+      users.add(userId);
+      actualNumberOfPlayers++;
+      semaphore.release();
+
+      return userId;
     } else {
       semaphore.release();
       return -1;

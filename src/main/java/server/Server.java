@@ -9,12 +9,13 @@ import interfaces.JogadorInterface;
 import main.java.interfaces.JogoInterface;
 import main.java.logic.GameManager;
 
+// se rodar na propria maquina tera conflito no envio de mensagens pois em certo momento somente 1 usuario vai receber as mensagens
 public class Server extends UnicastRemoteObject implements JogoInterface {
 	private static volatile int result;
-	private static volatile boolean changed;
-	private static volatile String remoteHostName;
+	private static volatile boolean isFullPlayer;
 	private static GameManager gamerManager;
 	public Server() throws RemoteException {
+		isFullPlayer = false;
 		
 	}
 
@@ -41,29 +42,15 @@ public class Server extends UnicastRemoteObject implements JogoInterface {
 			System.out.println("Server Serverfailed: " + e);
 		}
 		while (true) {
-			if (changed == true) {
-				changed = false;
-
-				String connectLocation = "rmi://" + remoteHostName + ":52369/Game2";
-
-				JogadorInterface player = null;
-				try {
-					System.out.println("Calling client back at : " + connectLocation);
-					player = (JogadorInterface) Naming.lookup(connectLocation);
-				} catch (Exception e) {
-					System.out.println ("Callback failed: ");
-					e.printStackTrace();
-				}
-
-				try {
-					player.Result(result);
-				} catch (RemoteException e) {
-					e.printStackTrace();
-				}
+			//verifica se todos os usuarios ja entraram no game para lancar o player
+			if(!isFullPlayer) {
+				isFullPlayer = gamerManager.isFullPlayers();
+			} else {
+				ServerSendToClientStartThread serverSendToClientStartThread = new ServerSendToClientStartThread(gamerManager.getListOfUserIp(), "Send message to start game for players");
+				serverSendToClientStartThread.start();
+				System.out.println("Game will be start");
+				break;
 			}
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException ex) {}
 		}
 	}
 
@@ -71,19 +58,20 @@ public class Server extends UnicastRemoteObject implements JogoInterface {
 	public int registra() throws RemoteException {
 		try {
 			result = gamerManager.registerUser();
-			changed = true;
-			try {
-				remoteHostName = getClientHost();
-			} catch (Exception e) {
+			System.out.println("Player added: " + result);
+
+		try {
+			gamerManager.addUserIp(getClientHost());
+		} catch (Exception e) {
 				System.out.println ("Failed to get client IP");
 				e.printStackTrace();
-			}
+		}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return -1;
+		return result;
 	}
 
 	@Override
