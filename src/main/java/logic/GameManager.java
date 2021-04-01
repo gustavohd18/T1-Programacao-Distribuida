@@ -5,10 +5,11 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.Semaphore;
 
+import main.java.logic.User;
+
 // necessita ser um singleton para ter uma unica instancia em toda a parte do server multiplas theads
 public class GameManager {
-  private List<Integer> users;
-  private List<String> usersIp;
+  private List<User> users;
   private Random randomGenerator;
   private int actualNumberOfPlayers;
   private int totNumberOfPlayer;
@@ -16,14 +17,13 @@ public class GameManager {
   static Semaphore semaphore = new Semaphore(1);
 
   public GameManager(int players) {
-    users = new ArrayList<Integer>();
-    usersIp = new ArrayList<String>();
+    users = new ArrayList<User>();
     randomGenerator = new Random();
     totNumberOfPlayer = players;
     actualNumberOfPlayers = 0;
   }
 
-  public List<Integer> getListOfUser() {
+  public List<User> getListOfUser() {
 		return users;
 	}
 
@@ -31,23 +31,19 @@ public class GameManager {
     return actualNumberOfPlayers >= totNumberOfPlayer;
   }
 
-  public void addUserIp(String id) throws InterruptedException {
+  public void removeUserIp(String userIp) throws InterruptedException {
     semaphore.acquire();
-    usersIp.add(id);
+    removeUserFromIp(userIp);
     semaphore.release();
   }
 
-  public void removeUserIp(String id) throws InterruptedException {
+  public void removeUserId(int userid) throws InterruptedException {
     semaphore.acquire();
-    usersIp.remove(id);
+    removeUserFromId(userid);
     semaphore.release();
   }
 
-  public List<String> getListOfUserIp() {
-		return usersIp;
-	}
-
-	public int registerUser() throws InterruptedException {
+	public int registerUser(String userIp) throws InterruptedException {
     semaphore.acquire();
     int userId = randomGenerator.nextInt();
 
@@ -56,7 +52,8 @@ public class GameManager {
         userId = randomGenerator.nextInt();
       }
 
-      users.add(userId);
+      User user = new User(userIp, userId);
+      users.add(user);
       actualNumberOfPlayers++;
       semaphore.release();
 
@@ -68,6 +65,27 @@ public class GameManager {
 	}
 
   private boolean isUserRegisted(int id) {
-    return users.contains(id);
+    for(User user: users) {
+      if(user.getUserId() == id) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private void removeUserFromIp(String userIp) {
+    for(int i =0; i< users.size(); i++) {
+      if(users.get(i).getUserIP() == userIp) {
+        users.remove(i);
+      }
+    }
+  }
+
+  private void removeUserFromId(int userId) {
+    for(int i =0; i< users.size(); i++) {
+      if(users.get(i).getUserId() == userId) {
+        users.remove(i);
+      }
+    }
   }
 }

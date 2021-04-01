@@ -6,19 +6,20 @@ import java.util.*;
 
 import interfaces.JogadorInterface;
 import main.java.interfaces.JogoInterface;
+import main.java.logic.User;
 
 public class ServerSendToClientStartThread extends Thread {
-	protected List<String> usersIps;
+	protected List<User> users;
 	protected String thread_name;
 
-	public ServerSendToClientStartThread (List<String> args, String name) {
-		usersIps = args;
+	public ServerSendToClientStartThread (List<User> args, String name) {
+		users = args;
 		thread_name = name;
 	}
 
 	public void run() {
-		for (String userIp : usersIps) {
-		String connectLocation = "rmi://" + userIp + ":52369/Game2";
+		for (User user : users) {
+		String connectLocation = "rmi://" + user.getUserIP() + ":52369/Game2";
 
 		JogadorInterface player = null;
 		try {

@@ -7,6 +7,7 @@ import java.util.TimerTask;
 
 import interfaces.JogadorInterface;
 import main.java.logic.GameManager;
+import main.java.logic.User;
 
 public class HeartBeatPlayersTask  extends TimerTask{
   private GameManager gameManager;
@@ -15,9 +16,9 @@ public class HeartBeatPlayersTask  extends TimerTask{
   }
   @Override
   public void run() {
-    List<String> userIps = gameManager.getListOfUserIp();
-		for (int i = 0; i< userIps.size(); i++) {
-      String userIp = userIps.get(i);
+    List<User> users = gameManager.getListOfUser();
+		for (int i = 0; i< users.size(); i++) {
+      String userIp = users.get(i).getUserIP();
       String connectLocation = "rmi://" + userIp + ":52369/Game2";
   
       JogadorInterface player = null;

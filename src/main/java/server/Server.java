@@ -49,7 +49,7 @@ public class Server extends UnicastRemoteObject implements JogoInterface {
 			if(!isFullPlayer) {
 				isFullPlayer = gamerManager.isFullPlayers();
 			} else {
-				ServerSendToClientStartThread serverSendToClientStartThread = new ServerSendToClientStartThread(gamerManager.getListOfUserIp(), "Send message to start game for players");
+				ServerSendToClientStartThread serverSendToClientStartThread = new ServerSendToClientStartThread(gamerManager.getListOfUser(), "Send message to start game for players");
 				serverSendToClientStartThread.start();
 				System.out.println("Game will be start");
 				break;
@@ -60,18 +60,12 @@ public class Server extends UnicastRemoteObject implements JogoInterface {
 	@Override
 	public int registra() throws RemoteException {
 		try {
-			result = gamerManager.registerUser();
+			String userIp = getClientHost();
+			result = gamerManager.registerUser(userIp);
 			System.out.println("Player added: " + result);
-
-		try {
-			gamerManager.addUserIp(getClientHost());
-		} catch (Exception e) {
-				System.out.println ("Failed to get client IP");
-				e.printStackTrace();
-		}
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println ("Failed to register user");
 		}
 
 		return result;
