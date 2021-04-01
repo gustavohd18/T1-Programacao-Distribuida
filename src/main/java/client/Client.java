@@ -56,8 +56,7 @@ public class Client extends UnicastRemoteObject implements JogadorInterface {
 
   @Override
   public void inicia() throws RemoteException {
-    // TODO Auto-generated method stub
-    System.out.println("test");
+    System.out.println("Game iniciou");
     
   }
 

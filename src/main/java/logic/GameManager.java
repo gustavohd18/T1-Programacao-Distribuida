@@ -8,6 +8,7 @@ import java.util.concurrent.Semaphore;
 // essa classe possivelmente pode ser que seja somente utilizada pelo servidor nao sendo necessario thead ou algo assim
 public class GameManager {
   private List<Integer> users;
+  private List<String> usersIp;
   private Random randomGenerator;
   private int actualNumberOfPlayers;
   private int totNumberOfPlayer;
@@ -16,6 +17,7 @@ public class GameManager {
 
   public GameManager(int players) {
     users = new ArrayList<Integer>();
+    usersIp = new ArrayList<String>();
     randomGenerator = new Random();
     totNumberOfPlayer = players;
     actualNumberOfPlayers = 0;
@@ -28,6 +30,16 @@ public class GameManager {
   public boolean isFullPlayers() {
     return actualNumberOfPlayers == totNumberOfPlayer;
   }
+
+  public void addUserIp(String id) throws InterruptedException {
+    semaphore.acquire();
+    usersIp.add(id);
+    semaphore.release();
+  }
+
+  public List<String> getListOfUserIp() {
+		return usersIp;
+	}
 
 	public int registerUser() throws InterruptedException {
     semaphore.acquire();

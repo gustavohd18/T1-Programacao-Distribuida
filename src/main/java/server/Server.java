@@ -9,6 +9,7 @@ import interfaces.JogadorInterface;
 import main.java.interfaces.JogoInterface;
 import main.java.logic.GameManager;
 
+// se rodar na propria maquina tera conflito no envio de mensagens pois em certo momento somente 1 usuario vai receber as mensagens
 public class Server extends UnicastRemoteObject implements JogoInterface {
 	private static volatile int result;
 	private static volatile boolean changed;
@@ -47,7 +48,10 @@ public class Server extends UnicastRemoteObject implements JogoInterface {
 			if(!isFullPlayer) {
 				isFullPlayer = gamerManager.isFullPlayers();
 			} else {
-					System.out.println("Jogo vai comecar");
+				ServerSendToClientStartThread serverSendToClientStartThread = new ServerSendToClientStartThread(gamerManager.getListOfUserIp(), "test");
+				serverSendToClientStartThread.start();
+				System.out.println("Jogo vai comecar");
+				break;
 			}
 		}
 	}
@@ -57,6 +61,13 @@ public class Server extends UnicastRemoteObject implements JogoInterface {
 		try {
 			result = gamerManager.registerUser();
 			System.out.println("Adicionado: " + result);
+
+		try {
+			gamerManager.addUserIp(getClientHost());
+		} catch (Exception e) {
+				System.out.println ("Failed to get client IP");
+				e.printStackTrace();
+		}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
