@@ -4,6 +4,7 @@ import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Timer;
 
 import interfaces.JogadorInterface;
 import main.java.interfaces.JogoInterface;
@@ -41,6 +42,9 @@ public class Server extends UnicastRemoteObject implements JogoInterface {
 		} catch (Exception e) {
 			System.out.println("Server Serverfailed: " + e);
 		}
+
+		//talvez nao seja o melhor lugar para chamar o heartBeat
+		new Timer().scheduleAtFixedRate(new HeartBeatPlayersTask(gamerManager), 0, 5000);
 		while (true) {
 			//verifica se todos os usuarios ja entraram no game para lancar o player
 			if(!isFullPlayer) {

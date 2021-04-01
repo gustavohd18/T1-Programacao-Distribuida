@@ -62,15 +62,13 @@ public class Client extends UnicastRemoteObject implements JogadorInterface {
 
   @Override
   public void bonifica() throws RemoteException {
-    // TODO Auto-generated method stub
-    System.out.println("test");
+    System.out.println("Gift from server");
     
   }
 
   @Override
   public void verifica() throws RemoteException {
-    // TODO Auto-generated method stub
-    System.out.println("test");
+    System.out.println("I'm live");
     
   }
 }
