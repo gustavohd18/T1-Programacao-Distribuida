@@ -37,6 +37,12 @@ public class GameManager {
     semaphore.release();
   }
 
+  public void removeUserIp(String id) throws InterruptedException {
+    semaphore.acquire();
+    usersIp.remove(id);
+    semaphore.release();
+  }
+
   public List<String> getListOfUserIp() {
 		return usersIp;
 	}

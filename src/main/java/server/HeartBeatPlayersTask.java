@@ -23,15 +23,25 @@ public class HeartBeatPlayersTask  extends TimerTask{
         player = (JogadorInterface) Naming.lookup(connectLocation);
       } catch (Exception e) {
          // caso tenha erro possivelmente temos que remover o usuario da lista pois ele nao esta no jogo mais
-        System.out.println ("Callback failed: ");
-        e.printStackTrace();
+        System.out.println ("Player don't aswers, so will be remove:" + connectLocation);
+        try {
+          gameManager.removeUserIp(userIp);
+        } catch(InterruptedException error) {
+          error.printStackTrace();
+        }
       }
   
       try {
         player.verifica();
       } catch (RemoteException e) {
         // caso tenha erro possivelmente temos que remover o usuario da lista pois ele nao esta no jogo mais
-        e.printStackTrace();
+        System.out.println ("Player don't aswers, so will be remove:" + connectLocation);
+        try {
+          gameManager.removeUserIp(userIp);
+        } catch(InterruptedException error) {
+          error.printStackTrace();
+        }
+
       }
     }
   }
