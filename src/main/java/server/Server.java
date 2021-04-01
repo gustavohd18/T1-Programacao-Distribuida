@@ -73,7 +73,15 @@ public class Server extends UnicastRemoteObject implements JogoInterface {
 
 	@Override
 	public int joga(int id) throws RemoteException {
-		// TODO Auto-generated method stub
+		System.out.println("Player id jogou: "+ id);
+		// talvez dependendo a probabilidade chamar o bonifica do usuario
+		boolean isBonus = gamerManager.isGiftBonus();
+		String userIp = gamerManager.getUserIp(id);
+		if(isBonus) {
+			if(!userIp.isEmpty()) {
+				sendBonusToPlayer(userIp);
+			}
+		}
 		return 0;
 	}
 
@@ -87,5 +95,22 @@ public class Server extends UnicastRemoteObject implements JogoInterface {
 	public int finaliza(int id) throws RemoteException {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	private void sendBonusToPlayer(String userIp) {
+		String connectLocation = "rmi://" + userIp + ":52369/Game2";
+  
+		JogadorInterface player = null;
+		try {
+			player = (JogadorInterface) Naming.lookup(connectLocation);
+		} catch (Exception e) {
+			System.out.println ("Player don't connected ");
+		}
+
+		try {
+			player.bonifica();
+		} catch (RemoteException e) {
+			System.out.println ("Player don't connected ");
+		}
 	}
 }

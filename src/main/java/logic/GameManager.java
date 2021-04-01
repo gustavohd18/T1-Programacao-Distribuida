@@ -13,6 +13,7 @@ public class GameManager {
   private Random randomGenerator;
   private int actualNumberOfPlayers;
   private int totNumberOfPlayer;
+  private int valueToGenerateBonus; 
   //por enquanto utilizar semaforos para garantir na escrita da lista somente sera realizado 1 por vez
   static Semaphore semaphore = new Semaphore(1);
 
@@ -21,14 +22,31 @@ public class GameManager {
     randomGenerator = new Random();
     totNumberOfPlayer = players;
     actualNumberOfPlayers = 0;
+    valueToGenerateBonus = 5;
   }
 
   public List<User> getListOfUser() {
 		return users;
 	}
 
+  public String getUserIp(int id) {
+    for(int i = 0; i < users.size(); i++) {
+      if(users.get(i).getUserId() == id) {
+        return users.get(i).getUserIP();
+      }
+    }
+    
+    return "";
+  }
+
   public boolean isFullPlayers() {
     return actualNumberOfPlayers >= totNumberOfPlayer;
+  }
+
+  public boolean isGiftBonus() {
+    // realizar calcula correto para achar a probabilidade de 3% de um valor
+    int numberSelected = randomGenerator.nextInt(100);
+    return numberSelected == valueToGenerateBonus;
   }
 
   public void removeUserIp(String userIp) throws InterruptedException {

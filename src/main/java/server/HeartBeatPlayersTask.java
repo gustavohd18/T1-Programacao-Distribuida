@@ -20,7 +20,7 @@ public class HeartBeatPlayersTask  extends TimerTask{
 		for (int i = 0; i< users.size(); i++) {
       User user = users.get(i);
       String userIp = user.getUserIP();
-      String connectLocation = "rmi://" + userIp + ":52369/Game2";
+      String connectLocation = "rmi://" + userIp + "/Game2";
   
       JogadorInterface player = null;
       try {

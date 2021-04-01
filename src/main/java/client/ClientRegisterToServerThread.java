@@ -23,6 +23,11 @@ public class ClientRegisterToServerThread extends Thread {
 
 		JogoInterface game = null;
 		try {
+			playerManager.setHost(remoteHostName);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		try {
 			System.out.println("Connecting to server at : " + connectLocation);
 			game = (JogoInterface) Naming.lookup(connectLocation);
 		} catch (Exception e) {
