@@ -12,9 +12,11 @@ import main.java.logic.GameManager;
 public class Server extends UnicastRemoteObject implements JogoInterface {
 	private static volatile int result;
 	private static volatile boolean changed;
+	private static volatile boolean isFullPlayer;
 	private static volatile String remoteHostName;
 	private static GameManager gamerManager;
 	public Server() throws RemoteException {
+		isFullPlayer = false;
 		
 	}
 
@@ -41,6 +43,12 @@ public class Server extends UnicastRemoteObject implements JogoInterface {
 			System.out.println("Server Serverfailed: " + e);
 		}
 		while (true) {
+			//verifica se todos os usuarios ja entraram no game para lancar o player
+			if(!isFullPlayer) {
+				isFullPlayer = gamerManager.isFullPlayers();
+			} else {
+					System.out.println("Jogo vai comecar");
+			}
 			if (changed == true) {
 				changed = false;
 
