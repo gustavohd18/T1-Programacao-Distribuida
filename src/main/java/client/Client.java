@@ -68,7 +68,6 @@ public class Client extends UnicastRemoteObject implements JogadorInterface {
 
   @Override
   public void verifica() throws RemoteException {
-    System.out.println("I'm live");
-    
+    System.out.println("I'm a live");
   }
 }

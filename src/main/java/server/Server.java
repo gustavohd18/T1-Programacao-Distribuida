@@ -42,8 +42,7 @@ public class Server extends UnicastRemoteObject implements JogoInterface {
 		} catch (Exception e) {
 			System.out.println("Server Serverfailed: " + e);
 		}
-
-		//talvez nao seja o melhor lugar para chamar o heartBeat
+		// HeartBeat 
 		new Timer().scheduleAtFixedRate(new HeartBeatPlayersTask(gamerManager), 0, 5000);
 		while (true) {
 			//verifica se todos os usuarios ja entraram no game para lancar o player
