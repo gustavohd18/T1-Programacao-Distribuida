@@ -20,11 +20,11 @@ public class HeartBeatPlayersTask  extends TimerTask{
 		for (int i = 0; i< users.size(); i++) {
       User user = users.get(i);
       String userIp = user.getUserIP();
-      String connectLocation = "rmi://" + userIp + "/Game2";
+      String connectLocation = "rmi://" + userIp + ":52369/Game2";
   
       JogadorInterface player = null;
       try {
-        System.out.println("Verify player is alive: " + user.getUserIP());
+        System.out.println("Verify player is alive : " + userIp);
         player = (JogadorInterface) Naming.lookup(connectLocation);
       } catch (Exception e) {
          // caso tenha erro possivelmente temos que remover o usuario da lista pois ele nao esta no jogo mais

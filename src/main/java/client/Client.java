@@ -102,7 +102,7 @@ public class Client extends UnicastRemoteObject implements JogadorInterface {
 	Random r = new Random();
 	float lucky = 1 - r.nextFloat();
 	if (lucky >= 0.98)
-    	System.out.println("Gift from server to player "+playerManager.userId+" ("+String.format("%.2f",lucky)+"% lucky) ");
+    	System.out.println("Gift from server to player "+playerManager.getUserId()+" ("+String.format("%.2f",lucky)+"% lucky) ");
   }
 
   @Override
