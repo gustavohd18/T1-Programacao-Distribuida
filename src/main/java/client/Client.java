@@ -38,7 +38,7 @@ public class Client extends UnicastRemoteObject implements JogadorInterface {
 			System.out.println("Server Serverfailed: " + e);
 		}
 
-		ClientRegisterToServerThread clientRegisterToServerThread =	new ClientRegisterToServerThread(args, "Registra usuario");
+		ClientRegisterToServerThread clientRegisterToServerThread =	new ClientRegisterToServerThread(args, "Register user");
 
 		clientRegisterToServerThread.start();
 
@@ -56,7 +56,7 @@ public class Client extends UnicastRemoteObject implements JogadorInterface {
 
   @Override
   public void inicia() throws RemoteException {
-    System.out.println("Game iniciou");
+    System.out.println("Game Started");
     
   }
 

@@ -1,8 +1,6 @@
 package main.java.client;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.util.*;
 
 import main.java.interfaces.JogoInterface;
 
@@ -32,9 +30,9 @@ public class ClientRegisterToServerThread extends Thread {
 		try {
 			int resultFromServer = game.registra();
       if(resultFromServer == -1) {
-        System.out.println("usuario nao registrado limite de jogadores atingidos");
+        System.out.println("Sorry we can't register you!");
       } else {
-				System.out.println("register() successful, id: " + resultFromServer);
+				System.out.println("register with successful your id: " + resultFromServer);
 			}			
 	
 		  } catch (RemoteException e) {

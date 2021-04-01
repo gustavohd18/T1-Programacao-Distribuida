@@ -20,5 +20,12 @@ public class GameManagerTest {
     int userId2 = gameManager.registerUser();
     assertEquals(userId, gameManager.getListOfUser().get(0));
     assertEquals(1, gameManager.getListOfUser().size());
+  } 
+
+  @Test
+  void shouldReturnAIdToUserIps() throws InterruptedException {
+    GameManager gameManager = new GameManager(1);
+    gameManager.addUserIp("user1");
+    assertEquals("user1", gameManager.getListOfUserIp().get(0));
   }   
 }
