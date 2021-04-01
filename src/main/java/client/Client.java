@@ -5,6 +5,8 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 
+import main.java.client.ClientRegisterToServerThread;
+
 import interfaces.JogadorInterface;
 import main.java.interfaces.JogoInterface;
 
@@ -36,29 +38,10 @@ public class Client extends UnicastRemoteObject implements JogadorInterface {
 			System.out.println("Server Serverfailed: " + e);
 		}
 
-    String remoteHostName = args[0];
-		String connectLocation = "rmi://" + remoteHostName + ":52369/Game";
+		ClientRegisterToServerThread clientRegisterToServerThread =	new ClientRegisterToServerThread(args, "Registra usuario");
 
-		JogoInterface game = null;
-		try {
-			System.out.println("Connecting to server at : " + connectLocation);
-			game = (JogoInterface) Naming.lookup(connectLocation);
-		} catch (Exception e) {
-			System.out.println ("Client failed: ");
-			e.printStackTrace();
-		}
+		clientRegisterToServerThread.start();
 
-    while (true) {
-			try {
-				game.registra();
-				System.out.println("Call to server..." );
-			} catch (RemoteException e) {
-				e.printStackTrace();
-			}
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException ex) {}
-		}
 	}
 
   public int Result(int val) {

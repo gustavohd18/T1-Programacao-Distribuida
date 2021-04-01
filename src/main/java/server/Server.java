@@ -49,29 +49,6 @@ public class Server extends UnicastRemoteObject implements JogoInterface {
 			} else {
 					System.out.println("Jogo vai comecar");
 			}
-			if (changed == true) {
-				changed = false;
-
-				String connectLocation = "rmi://" + remoteHostName + ":52369/Game2";
-
-				JogadorInterface player = null;
-				try {
-					System.out.println("Calling client back at : " + connectLocation);
-					player = (JogadorInterface) Naming.lookup(connectLocation);
-				} catch (Exception e) {
-					System.out.println ("Callback failed: ");
-					e.printStackTrace();
-				}
-
-				try {
-					player.Result(result);
-				} catch (RemoteException e) {
-					e.printStackTrace();
-				}
-			}
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException ex) {}
 		}
 	}
 
@@ -79,19 +56,13 @@ public class Server extends UnicastRemoteObject implements JogoInterface {
 	public int registra() throws RemoteException {
 		try {
 			result = gamerManager.registerUser();
-			changed = true;
-			try {
-				remoteHostName = getClientHost();
-			} catch (Exception e) {
-				System.out.println ("Failed to get client IP");
-				e.printStackTrace();
-			}
+			System.out.println("Adicionado: " + result);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return -1;
+		return result;
 	}
 
 	@Override
