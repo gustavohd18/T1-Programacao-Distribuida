@@ -29,7 +29,12 @@ public class Client extends UnicastRemoteObject implements JogadorInterface {
     try 
 	{
 		System.setProperty("java.rmi.server.hostname", args[1]);
-		LocateRegistry.createRegistry(52369);
+		int defaultPort = 52369;
+		//verifica se passou a porta por parametro
+		if(args.length == 3) {
+			defaultPort = Integer.parseInt(args[2]);
+		}
+		LocateRegistry.createRegistry(defaultPort);
 		System.out.println("java RMI registry created.");
 	} 
 	catch (RemoteException e)
@@ -37,8 +42,7 @@ public class Client extends UnicastRemoteObject implements JogadorInterface {
 		System.out.println("java RMI registry already exists.");
 	}
 
-    try 
-	{
+    try {
 		String client = "rmi://" + args[1] + ":52369/Game2";
 		Naming.rebind(client, new Client());
 		playerManager = new PlayerManager();
