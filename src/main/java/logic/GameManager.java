@@ -38,7 +38,7 @@ public class GameManager {
   }
 
   public boolean isFullPlayers() {
-    return actualNumberOfPlayers >= totNumberOfPlayer;
+    return (actualNumberOfPlayers >= totNumberOfPlayer) && verifyAllUserHasIp();
   }
 
   public boolean isGiftBonus() {
@@ -108,6 +108,15 @@ public class GameManager {
         users.remove(i);
       }
     }
+  }
+
+  private boolean verifyAllUserHasIp() {
+    for(int i =0; i< users.size(); i++) {
+      if(users.get(i).getUserIP() == null) {
+        return false;
+      }
+    }
+    return true;
   }
 
    void removeUserFromId(int userId) {
