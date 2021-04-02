@@ -45,7 +45,6 @@ public class HeartBeatPlayersTask  extends TimerTask{
         } catch(InterruptedException error) {
           error.printStackTrace();
         }
-        // caso tenha erro possivelmente temos que remover o usuario da lista pois ele nao esta no jogo mais
         System.out.println ("Player don't aswers, so will be remove: " + user.getUserIP());
       }
     }

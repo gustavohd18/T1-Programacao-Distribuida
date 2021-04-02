@@ -58,9 +58,9 @@ public class Server extends UnicastRemoteObject implements JogoInterface {
 	}
 
 	@Override
-	public int registra(String ip) throws RemoteException {
+	public int registra() throws RemoteException {
 		try {
-			result = gamerManager.registerUser(ip);
+			result = gamerManager.registerUser();
 			System.out.println("Player added: " + result);
 			
 		} catch (Exception e) {
@@ -69,6 +69,20 @@ public class Server extends UnicastRemoteObject implements JogoInterface {
 
 		return result;
 	}
+
+	@Override
+	public int registraIp(String ip, int id) throws RemoteException {
+		try {
+			gamerManager.registerUserIp(id, ip);
+			System.out.println("Registed ip Client: " + result);
+			
+		} catch (Exception e) {
+			System.out.println ("Failed to register ip to user");
+		}
+
+		return 0;
+	}
+
 
 	@Override
 	public int joga(int id) throws RemoteException {

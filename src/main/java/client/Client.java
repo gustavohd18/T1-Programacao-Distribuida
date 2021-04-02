@@ -34,6 +34,8 @@ public class Client extends UnicastRemoteObject implements JogadorInterface {
 		//verifica se passou a porta por parametro
 		if(args.length == 3) {
 			defaultPort = Integer.parseInt(args[2]);
+		} else {
+			defaultPort = 52369;
 		}
 		LocateRegistry.createRegistry(defaultPort);
 		System.out.println("java RMI registry created.");

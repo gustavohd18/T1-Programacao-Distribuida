@@ -58,7 +58,7 @@ public class GameManager {
     semaphore.release();
   }
 
-	public int registerUser(String userIp) throws InterruptedException {
+  public int registerUser() throws InterruptedException {
     semaphore.acquire();
     int userId = randomGenerator.nextInt();
 
@@ -67,7 +67,7 @@ public class GameManager {
         userId = randomGenerator.nextInt();
       }
 
-      User user = new User(userIp, userId);
+      User user = new User(userId);
       users.add(user);
       actualNumberOfPlayers++;
       semaphore.release();
@@ -77,6 +77,20 @@ public class GameManager {
       semaphore.release();
       return -1;
     }
+	}
+
+	public int registerUserIp(int userId, String userIp) throws InterruptedException {
+    semaphore.acquire();
+
+    for(int i =0; i< users.size(); i++) {
+      if(users.get(i).getUserId() == userId) {
+        users.get(i).setUserIp(userIp);
+      }
+    }
+
+    semaphore.release();
+
+    return -1;
 	}
 
   private boolean isUserRegisted(int id) {
