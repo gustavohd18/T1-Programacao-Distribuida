@@ -58,10 +58,9 @@ public class Server extends UnicastRemoteObject implements JogoInterface {
 	}
 
 	@Override
-	public int registra() throws RemoteException {
+	public int registra(String ip) throws RemoteException {
 		try {
-			String userIp = getClientHost();
-			result = gamerManager.registerUser(userIp);
+			result = gamerManager.registerUser(ip);
 			System.out.println("Player added: " + result);
 			
 		} catch (Exception e) {
@@ -98,7 +97,7 @@ public class Server extends UnicastRemoteObject implements JogoInterface {
 	}
 
 	private void sendBonusToPlayer(String userIp) {
-		String connectLocation = "rmi://" + userIp + ":52369/Game2";
+		String connectLocation =  userIp ;
   
 		JogadorInterface player = null;
 		try {

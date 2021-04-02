@@ -19,7 +19,7 @@ public class ServerSendToClientStartThread extends Thread {
 
 	public void run() {
 		for (User user : users) {
-		String connectLocation = "rmi://" + user.getUserIP() + ":52369/Game2";
+		String connectLocation = user.getUserIP();
 
 		JogadorInterface player = null;
 		try {

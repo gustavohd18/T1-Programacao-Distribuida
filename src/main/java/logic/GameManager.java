@@ -35,7 +35,7 @@ public class GameManager {
         return users.get(i).getUserIP();
       }
     }
-    
+
     return "";
   }
 
@@ -55,9 +55,9 @@ public class GameManager {
     semaphore.release();
   }
 
-  public void removeUserId(int userid) throws InterruptedException {
+  public void removeUserId(int userId) throws InterruptedException {
     semaphore.acquire();
-    removeUserFromId(userid);
+    removeUserFromId(userId);
     semaphore.release();
   }
 
@@ -99,7 +99,7 @@ public class GameManager {
     }
   }
 
-  private void removeUserFromId(int userId) {
+   void removeUserFromId(int userId) {
     for(int i =0; i< users.size(); i++) {
       if(users.get(i).getUserId() == userId) {
         users.remove(i);

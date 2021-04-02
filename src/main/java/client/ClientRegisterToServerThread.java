@@ -36,7 +36,7 @@ public class ClientRegisterToServerThread extends Thread {
 		}
 	
 		try {
-			int resultFromServer = game.registra();
+			int resultFromServer = game.registra(playerManager.getOwnIp());
       if(resultFromServer == -1) {
         System.out.println("Sorry we can't register you!");
       } else {

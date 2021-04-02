@@ -20,7 +20,7 @@ public class HeartBeatPlayersTask  extends TimerTask{
 		for (int i = 0; i< users.size(); i++) {
       User user = users.get(i);
       String userIp = user.getUserIP();
-      String connectLocation = "rmi://" + userIp + ":52369/Game2";
+      String connectLocation =  userIp ;
   
       JogadorInterface player = null;
       try {
@@ -28,9 +28,10 @@ public class HeartBeatPlayersTask  extends TimerTask{
         player = (JogadorInterface) Naming.lookup(connectLocation);
       } catch (Exception e) {
          // caso tenha erro possivelmente temos que remover o usuario da lista pois ele nao esta no jogo mais
-        System.out.println ("Player don't aswers, so will be remove: " + user.getUserIP());
+        System.out.println ("Player don't aswers, so will be remove 2: " + user.getUserIP());
         try {
           gameManager.removeUserIp(userIp);
+          return;
         } catch(InterruptedException error) {
           error.printStackTrace();
         }
@@ -39,14 +40,13 @@ public class HeartBeatPlayersTask  extends TimerTask{
       try {
         player.verifica();
       } catch (RemoteException e) {
-        // caso tenha erro possivelmente temos que remover o usuario da lista pois ele nao esta no jogo mais
-        System.out.println ("Player don't aswers, so will be remove: " + user.getUserIP());
         try {
           gameManager.removeUserIp(userIp);
         } catch(InterruptedException error) {
           error.printStackTrace();
         }
-
+        // caso tenha erro possivelmente temos que remover o usuario da lista pois ele nao esta no jogo mais
+        System.out.println ("Player don't aswers, so will be remove: " + user.getUserIP());
       }
     }
   }

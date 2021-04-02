@@ -16,12 +16,14 @@ import java.util.Random;
 public class Client extends UnicastRemoteObject implements JogadorInterface {
 
 	private static PlayerManager playerManager;
+	private static int defaultPort = 52369;
 
   public Client() throws RemoteException {
+		defaultPort = 52369;
 	}
 
   public static void main(String[] args) {
-	if (args.length != 2) 
+	if (args.length < 2) 
 	{
 		System.out.println("Usage: java Client <server ip> <client ip>");
 		System.exit(1);
@@ -29,7 +31,6 @@ public class Client extends UnicastRemoteObject implements JogadorInterface {
     try 
 	{
 		System.setProperty("java.rmi.server.hostname", args[1]);
-		int defaultPort = 52369;
 		//verifica se passou a porta por parametro
 		if(args.length == 3) {
 			defaultPort = Integer.parseInt(args[2]);
@@ -43,9 +44,10 @@ public class Client extends UnicastRemoteObject implements JogadorInterface {
 	}
 
     try {
-		String client = "rmi://" + args[1] + ":52369/Game2";
+			String client = "rmi://" + args[1] + ":"+defaultPort+"/Game2";
 		Naming.rebind(client, new Client());
 		playerManager = new PlayerManager();
+		playerManager.setOwnIp(client);
 		System.out.println("Server is ready.");
 	} 
 	catch (Exception e)
