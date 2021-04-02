@@ -87,10 +87,6 @@ public class Client extends UnicastRemoteObject implements JogadorInterface {
 	}
 }
 
-  public int sumTest(int n1, int n2) {
-    return n1 + n2;
-  }
-
   @Override
   public void inicia() throws RemoteException {
 		try {
@@ -133,7 +129,7 @@ public class Client extends UnicastRemoteObject implements JogadorInterface {
 			}
 
 			if(!foundGiveUp) {
-				
+
 				try{
 					Thread.sleep(between);
 				} catch(Exception e) {
