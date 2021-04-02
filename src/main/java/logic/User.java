@@ -4,9 +4,12 @@ public class User {
   private String userIp;
   private Integer userId;
 
-  public User(String uIp, Integer uId) {
-    userIp = uIp;
+  public User(Integer uId) {
     userId = uId;
+  }
+
+  public void setUserIp(String ip) {
+     userIp = ip;
   }
 
   public String getUserIP() {

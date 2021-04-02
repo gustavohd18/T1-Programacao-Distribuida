@@ -13,7 +13,6 @@ public class GameManager {
   private Random randomGenerator;
   private int actualNumberOfPlayers;
   private int totNumberOfPlayer;
-  private int valueToGenerateBonus; 
   //por enquanto utilizar semaforos para garantir na escrita da lista somente sera realizado 1 por vez
   static Semaphore semaphore = new Semaphore(1);
 
@@ -22,7 +21,6 @@ public class GameManager {
     randomGenerator = new Random();
     totNumberOfPlayer = players;
     actualNumberOfPlayers = 0;
-    valueToGenerateBonus = 5;
   }
 
   public List<User> getListOfUser() {
@@ -35,7 +33,7 @@ public class GameManager {
         return users.get(i).getUserIP();
       }
     }
-    
+
     return "";
   }
 
@@ -44,9 +42,8 @@ public class GameManager {
   }
 
   public boolean isGiftBonus() {
-    // realizar calcula correto para achar a probabilidade de 3% de um valor
-    int numberSelected = randomGenerator.nextInt(100);
-    return numberSelected == valueToGenerateBonus;
+    float lucky = 1 - randomGenerator.nextFloat();
+    return lucky >= 0.98;
   }
 
   public void removeUserIp(String userIp) throws InterruptedException {
@@ -55,13 +52,13 @@ public class GameManager {
     semaphore.release();
   }
 
-  public void removeUserId(int userid) throws InterruptedException {
+  public void removeUserId(int userId) throws InterruptedException {
     semaphore.acquire();
-    removeUserFromId(userid);
+    removeUserFromId(userId);
     semaphore.release();
   }
 
-	public int registerUser(String userIp) throws InterruptedException {
+  public int registerUser() throws InterruptedException {
     semaphore.acquire();
     int userId = randomGenerator.nextInt();
 
@@ -70,7 +67,7 @@ public class GameManager {
         userId = randomGenerator.nextInt();
       }
 
-      User user = new User(userIp, userId);
+      User user = new User(userId);
       users.add(user);
       actualNumberOfPlayers++;
       semaphore.release();
@@ -80,6 +77,20 @@ public class GameManager {
       semaphore.release();
       return -1;
     }
+	}
+
+	public int registerUserIp(int userId, String userIp) throws InterruptedException {
+    semaphore.acquire();
+
+    for(int i =0; i< users.size(); i++) {
+      if(users.get(i).getUserId() == userId) {
+        users.get(i).setUserIp(userIp);
+      }
+    }
+
+    semaphore.release();
+
+    return -1;
 	}
 
   private boolean isUserRegisted(int id) {
@@ -99,7 +110,7 @@ public class GameManager {
     }
   }
 
-  private void removeUserFromId(int userId) {
+   void removeUserFromId(int userId) {
     for(int i =0; i< users.size(); i++) {
       if(users.get(i).getUserId() == userId) {
         users.remove(i);

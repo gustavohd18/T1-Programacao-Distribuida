@@ -6,6 +6,7 @@ public class PlayerManager {
   private Integer userId;
   private boolean canPlay;
   private String hostServer;
+  private String ownIp;
   static Semaphore semaphore = new Semaphore(1);
   
   public void setUserId(Integer id) throws InterruptedException {
@@ -16,6 +17,16 @@ public class PlayerManager {
 
   public Integer getUserId() {
    return userId;
+  }
+
+  public void setOwnIp(String ip) throws InterruptedException {
+    semaphore.acquire();
+    ownIp = ip;
+    semaphore.release();
+  }
+
+  public String getOwnIp() {
+   return ownIp;
   }
 
   public void setHost(String host) throws InterruptedException {
