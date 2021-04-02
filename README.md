@@ -11,7 +11,7 @@ com uma porta utilize o comando `./gradlew runClient --args="<serverIp> <clientI
 Comandos:
 * Rodar o programa modo servidor linux: `./gradlew runServer --args="<serverIp> <numberPlayers>"`
 * Rodar o programa modo servidor Windows: `gradlew.bat runServer --args="<serverIp> <numberPlayers>"`
-* Rodar o programa modo Cliente linux: `./gradlew runClient --args="<serverIp> <clientIp> <port optional>"`
-* Rodar o programa modo Cliente Windows: `gradlew.bat runClient --args="<serverIp> <clientIp> <port optional>"`
+* Rodar o programa modo Cliente linux: `./gradlew runClient --args="<serverIp> <clientIp> <port optional> <number of plays> <number of give up>"`
+* Rodar o programa modo Cliente Windows: `gradlew.bat runClient --args="<serverIp> <clientIp> <port optional> <number of plays> <number of give up>"`
 * Rodar os testes: `./gradlew test` or `gradlew.bat test`
 

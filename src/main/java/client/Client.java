@@ -11,6 +11,8 @@ import interfaces.JogadorInterface;
 import main.java.interfaces.JogoInterface;
 import main.java.logic.PlayerManager;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Client extends UnicastRemoteObject implements JogadorInterface {
@@ -23,16 +25,16 @@ public class Client extends UnicastRemoteObject implements JogadorInterface {
 	}
 
   public static void main(String[] args) {
-	if (args.length < 2) 
+	if (args.length < 4) 
 	{
-		System.out.println("Usage: java Client <server ip> <client ip>");
+		System.out.println("Usage: java Client <server ip> <client ip> <port optional> <number of plays> <number of give up>");
 		System.exit(1);
 	}
     try 
 	{
 		System.setProperty("java.rmi.server.hostname", args[1]);
 		//verifica se passou a porta por parametro
-		if(args.length == 3) {
+		if(args.length == 5) {
 			defaultPort = Integer.parseInt(args[2]);
 		} else {
 			defaultPort = 52369;
@@ -75,17 +77,13 @@ public class Client extends UnicastRemoteObject implements JogadorInterface {
 
 	while(true) 
 	{
-		int between = rnd.nextInt(700) + 250;
-		try{
-			Thread.sleep(between);
-		} catch(Exception e) {
-			e.printStackTrace();
+		if(args.length == 5) {
+			handleWithPlayAndGiveUp(Integer.parseInt(args[3]), Integer.parseInt(args[4]), playerManager.getUserId());
+		} else {
+			handleWithPlayAndGiveUp(Integer.parseInt(args[2]), Integer.parseInt(args[3]), playerManager.getUserId());	
 		}
-		if(true)  // Não desistiu (implementar)
-		{
-			sendToServerToPlay(playerManager.getUserId());
-			// Se jogou M vezes...
-		}			
+		sendToServerToFinished( playerManager.getUserId());	
+		break;		
 	}
 }
 
@@ -114,12 +112,45 @@ public class Client extends UnicastRemoteObject implements JogadorInterface {
     System.out.println("I'm a live");
   }
 
+	private static void handleWithPlayAndGiveUp(int maxPlay, int giveUps, int id) {
+		List<Integer> giveupsPosition = new ArrayList<Integer>();
+		Random rnd = new Random();
+		// tempo para jogar ou desistir aleatorios
+		int between = rnd.nextInt(700) + 250;
+		boolean foundGiveUp = false;
+
+		for(int i = 0; i < giveUps; i ++) {
+			giveupsPosition.add(rnd.nextInt(maxPlay));
+		}
+
+		for(int i = 0; i < maxPlay; i ++) {
+			outerloop:
+			for(int j = 0; j < giveUps; j ++) {
+				if(i == giveupsPosition.get(j)) {
+					sendToServerToGiveUp(id);
+					break outerloop;
+				}
+			}
+
+			if(!foundGiveUp) {
+				
+				try{
+					Thread.sleep(between);
+				} catch(Exception e) {
+					e.printStackTrace();
+				}
+
+				sendToServerToPlay(id);
+			}
+		}
+	}
+
 	private static void sendToServerToPlay(int id) {
 		String connectLocation = "rmi://" + playerManager.getHost() + ":52369/Game";
 
 		JogoInterface game = null;
 		try {
-			//System.out.println("Connecting to server at : " + connectLocation);
+			System.out.println("Connecting to server at : " + connectLocation);
 			game = (JogoInterface) Naming.lookup(connectLocation);
 		} catch (Exception e) {
 			System.out.println ("Client failed: ");
@@ -129,6 +160,44 @@ public class Client extends UnicastRemoteObject implements JogadorInterface {
 		try {
 			int resultFromServer = game.joga(id);
 			System.out.println("You played");
+		  } catch (RemoteException e) {
+		}
+	}
+
+	private static void sendToServerToFinished(int id) {
+		String connectLocation = "rmi://" + playerManager.getHost() + ":52369/Game";
+
+		JogoInterface game = null;
+		try {
+			System.out.println("Connecting to server at : " + connectLocation);
+			game = (JogoInterface) Naming.lookup(connectLocation);
+		} catch (Exception e) {
+			System.out.println ("Client failed: ");
+			e.printStackTrace();
+		}
+	
+		try {
+			int resultFromServer = game.finaliza(id);
+			System.out.println("You finished game");
+		  } catch (RemoteException e) {
+		}
+	}
+
+	private static void sendToServerToGiveUp(int id) {
+		String connectLocation = "rmi://" + playerManager.getHost() + ":52369/Game";
+
+		JogoInterface game = null;
+		try {
+			System.out.println("Connecting to server at : " + connectLocation);
+			game = (JogoInterface) Naming.lookup(connectLocation);
+		} catch (Exception e) {
+			System.out.println ("Client failed: ");
+			e.printStackTrace();
+		}
+	
+		try {
+			int resultFromServer = game.desiste(id);
+			System.out.println("You Give up a play");
 		  } catch (RemoteException e) {
 		}
 	}
