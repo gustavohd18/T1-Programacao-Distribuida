@@ -16,7 +16,7 @@ import java.util.Random;
 public class Client extends UnicastRemoteObject implements JogadorInterface {
 
 	private static PlayerManager playerManager;
-	private static int defaultPort = 52369;
+	private static int defaultPort;
 
   public Client() throws RemoteException {
 		defaultPort = 52369;
@@ -43,15 +43,14 @@ public class Client extends UnicastRemoteObject implements JogadorInterface {
 		System.out.println("java RMI registry already exists.");
 	}
 
-    try {
-			String client = "rmi://" + args[1] + ":"+defaultPort+"/Game2";
+  try {
+		String client = "rmi://" + args[1] + ":"+defaultPort+"/Game2";
 		Naming.rebind(client, new Client());
 		playerManager = new PlayerManager();
 		playerManager.setOwnIp(client);
 		System.out.println("Server is ready.");
 	} 
-	catch (Exception e)
-	{
+	catch (Exception e) {
 		System.out.println("Server Serverfailed: " + e);
 	}
 
@@ -105,10 +104,7 @@ public class Client extends UnicastRemoteObject implements JogadorInterface {
 
   @Override
   public void bonifica() throws RemoteException {
-	Random r = new Random();
-	float lucky = 1 - r.nextFloat();
-	if (lucky >= 0.98)
-    	System.out.println("Gift from server to player "+playerManager.getUserId()+" ("+String.format("%.2f",lucky)+"% lucky) ");
+    	System.out.println("Gift from server to player: "+playerManager.getUserId());
   }
 
   @Override

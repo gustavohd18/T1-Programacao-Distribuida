@@ -10,14 +10,13 @@ import interfaces.JogadorInterface;
 import main.java.interfaces.JogoInterface;
 import main.java.logic.GameManager;
 
-// se rodar na propria maquina tera conflito no envio de mensagens pois em certo momento somente 1 usuario vai receber as mensagens
 public class Server extends UnicastRemoteObject implements JogoInterface {
 	private static volatile int result;
 	private static volatile boolean isFullPlayer;
-	private static GameManager gamerManager;
+	private static volatile GameManager gamerManager;
+
 	public Server() throws RemoteException {
 		isFullPlayer = false;
-		
 	}
 
 	public static void main(String[] args) {
@@ -44,8 +43,9 @@ public class Server extends UnicastRemoteObject implements JogoInterface {
 		}
 		// HeartBeat 
 		new Timer().scheduleAtFixedRate(new HeartBeatPlayersTask(gamerManager), 0, 5000);
+
 		while (true) {
-			//verifica se todos os usuarios ja entraram no game para lancar o player
+			//verifica se todos os usuarios ja entraram no game para lançar o player
 			if(!isFullPlayer) {
 				isFullPlayer = gamerManager.isFullPlayers();
 			} else {
@@ -72,10 +72,11 @@ public class Server extends UnicastRemoteObject implements JogoInterface {
 
 	@Override
 	public int joga(int id) throws RemoteException {
-		System.out.println("Player id jogou: "+ id);
-		// talvez dependendo a probabilidade chamar o bonifica do usuario
+		System.out.println("Player id played: "+ id);
+
 		boolean isBonus = gamerManager.isGiftBonus();
 		String userIp = gamerManager.getUserIp(id);
+
 		if(isBonus) {
 			if(!userIp.isEmpty()) {
 				sendBonusToPlayer(userIp);
@@ -86,20 +87,26 @@ public class Server extends UnicastRemoteObject implements JogoInterface {
 
 	@Override
 	public int desiste(int id) throws RemoteException {
-		// TODO Auto-generated method stub
+		System.out.println("Player id gave up the move: "+ id);
 		return 0;
 	}
 
 	@Override
 	public int finaliza(int id) throws RemoteException {
-		// TODO Auto-generated method stub
+		try {
+			gamerManager.removeUserId(id);
+			System.out.println("Removed user with id: "+ id);
+		} catch (Exception e) {
+			System.out.println ("Failed to removed user");
+		}
 		return 0;
 	}
 
 	private void sendBonusToPlayer(String userIp) {
-		String connectLocation =  userIp ;
+		String connectLocation =  userIp;
   
 		JogadorInterface player = null;
+
 		try {
 			player = (JogadorInterface) Naming.lookup(connectLocation);
 		} catch (Exception e) {
