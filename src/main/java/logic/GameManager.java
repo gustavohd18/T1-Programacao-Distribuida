@@ -7,13 +7,12 @@ import java.util.concurrent.Semaphore;
 
 import main.java.logic.User;
 
-// necessita ser um singleton para ter uma unica instancia em toda a parte do server multiplas theads
 public class GameManager {
   private List<User> users;
   private Random randomGenerator;
   private int actualNumberOfPlayers;
   private int totNumberOfPlayer;
-  //por enquanto utilizar semaforos para garantir na escrita da lista somente sera realizado 1 por vez
+  //Semaforo para evitar problemas de escrita
   static Semaphore semaphore = new Semaphore(1);
 
   public GameManager(int players) {

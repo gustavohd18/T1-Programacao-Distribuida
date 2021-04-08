@@ -14,6 +14,7 @@ public class HeartBeatPlayersTask  extends TimerTask{
   public HeartBeatPlayersTask(GameManager gm) {
     gameManager = gm;
   }
+
   @Override
   public void run() {
     List<User> users = gameManager.getListOfUser();
@@ -27,7 +28,7 @@ public class HeartBeatPlayersTask  extends TimerTask{
         System.out.println("Verify player is alive : " + userIp);
         player = (JogadorInterface) Naming.lookup(connectLocation);
       } catch (Exception e) {
-         // caso tenha erro possivelmente temos que remover o usuario da lista pois ele nao esta no jogo mais
+         // caso tenha erro removemos o jogador da lista
         System.out.println ("Player don't aswers, so will be remove 2: " + user.getUserIP());
         try {
           gameManager.removeUserIp(userIp);
