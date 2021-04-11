@@ -111,8 +111,9 @@ public class Client extends UnicastRemoteObject implements JogadorInterface {
 	private static void handleWithPlayAndGiveUp(int maxPlay, int giveUps, int id) {
 		List<Integer> giveupsPosition = new ArrayList<Integer>();
 		Random rnd = new Random();
-		// tempo para jogar ou desistir aleatorios
+		// tempo para jogar aleatorios
 		int between = rnd.nextInt(700) + 250;
+		
 		boolean foundGiveUp = false;
 
 		for(int i = 0; i < giveUps; i ++) {
